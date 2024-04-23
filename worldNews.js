@@ -326,6 +326,10 @@ if (typeof Object.merge != 'function') {
         // Add touch event listeners
         cvEl.addEventListener('touchstart', this.onTouchStart(this.matrix[row][col]));
         cvEl.addEventListener('touchend', this.onTouchEnd());
+        
+        cvEl.addEventListener('touchstart', handleTouchStart);
+        cvEl.addEventListener('touchmove', handleTouchMove);
+        cvEl.addEventListener('touchend', handleTouchEnd);
 
         divEl.appendChild(cvEl);
       }
@@ -362,6 +366,32 @@ if (typeof Object.merge != 'function') {
       }
     };
   };
+
+function handleTouchStart(event) {
+  // Get the touch coordinates and calculate the word
+  const touch = event.touches[0];
+  const word = calculateWordFromCoordinates(touch.clientX, touch.clientY);
+
+  // Highlight the selected word
+  if (word) {
+    highlightWord(word);
+  }
+}
+
+function handleTouchMove(event) {
+  // Update the selected word as the user drags their finger
+  const touch = event.touches[0];
+  const word = calculateWordFromCoordinates(touch.clientX, touch.clientY);
+
+  if (word) {
+    highlightWord(word);
+  }
+}
+
+function handleTouchEnd(event) {
+  // Remove the highlight when the user lifts their finger
+  removeHighlight();
+}
 
   WordSearch.prototype.onTouchStart = function(cell) {
     return (function(e) {
