@@ -378,20 +378,20 @@ function handleTouchStart(event) {
   }
 }
 
-function handleTouchMove(event) {
-  // Update the selected word as the user drags their finger
-  const touch = event.touches[0];
-  const word = calculateWordFromCoordinates(touch.clientX, touch.clientY);
+  function handleTouchMove(event) {
+    // Update the selected word as the user drags their finger
+    const touch = event.touches[0];
+    const word = calculateWordFromCoordinates(touch.clientX, touch.clientY);
 
-  if (word) {
-    highlightWord(word);
+    if (word) {
+      highlightWord(word);
+    }
   }
-}
 
-function handleTouchEnd(event) {
-  // Remove the highlight when the user lifts their finger
-  removeHighlight();
-}
+  function handleTouchEnd(event) {
+    // Remove the highlight when the user lifts their finger
+    removeHighlight();
+  }
 
   WordSearch.prototype.onTouchStart = function(cell) {
     return (function(e) {
@@ -788,3 +788,132 @@ document.addEventListener("DOMContentLoaded", function() {
     popupNotification.style.display = "none";
   });
 });
+
+
+class WordSearch {
+  constructor(matrix) {
+    this.matrix = matrix;
+    this.selectedWord = '';
+    this.startCell = null;
+    this.endCell = null;
+    this.cvEl = document.getElementById('wordsearch');
+    this.cvEl.addEventListener('mousedown', this.onMousedown.bind(this));
+    this.cvEl.addEventListener('mouseup', this.onMouseup.bind(this));
+    this.render();
+  }
+
+  render() {
+    let output = '';
+    for (let row of this.matrix) {
+      output += '<div class="row">';
+      for (let cell of row) {
+        output += `<div class="cell">${cell}</div>`;
+      }
+      output += '</div>';
+    }
+    this.cvEl.innerHTML = output;
+  }
+
+  checkWord() {
+    const direction = this.getDirection(this.startCell, this.endCell);
+    let word = '';
+    let cell = this.startCell;
+    while (cell) {
+      word += this.matrix[cell.row][cell.col];
+      if (cell.row === this.endCell.row && cell.col === this.endCell.col) break;
+      cell = this.getNextCell(cell, direction);
+    }
+    return word.toLowerCase();
+  }
+
+  getNextCell(cell, direction) {
+    switch (direction) {
+      case 'horizontal':
+        return { row: cell.row, col: cell.col + 1 };
+      case 'vertical':
+        return { row: cell.row + 1, col: cell.col };
+      case 'diagonal':
+        return { row: cell.row + 1, col: cell.col + 1 };
+      default:
+        return null;
+    }
+  }
+
+  getDirection(start, end) {
+    if (start.row === end.row) {
+      return 'horizontal';
+    } else if (start.col === end.col) {
+      return 'vertical';
+    } else {
+      return 'diagonal';
+    }
+  }
+
+  onMousedown(event) {
+    const cell = this.getCellFromEvent(event);
+    if (cell) {
+      this.startCell = cell;
+    }
+  }
+
+  onMouseup(event) {
+    const cell = this.getCellFromEvent(event);
+    if (cell && this.startCell) {
+      this.endCell = cell;
+      const word = this.checkWord();
+      if (word.length > 1) {
+        this.selectedWord = word;
+        console.log('Selected word:', this.selectedWord);
+        this.highlightWord(this.selectedWord);
+        this.displayHint(this.selectedWord);
+        this.displayLink(this.selectedWord);
+      }
+    }
+  }
+
+  getCellFromEvent(event) {
+    const cellEl = event.target.closest('.cell');
+    if (cellEl) {
+      const row = cellEl.parentNode.rowIndex;
+      const col = cellEl.cellIndex;
+      return { row, col };
+    }
+    return null;
+  }
+
+  highlightWord(word) {
+    const cells = document.querySelectorAll('.cell');
+    for (const cell of cells) {
+      cell.classList.remove('highlighted');
+    }
+    for (const letter of word) {
+      const cell = document.querySelector(`.row:nth-child(${this.startCell.row + 1}) .cell:nth-child(${this.startCell.col + 1})`);
+      cell.classList.add('highlighted');
+      this.startCell = this.getNextCell(this.startCell, this.getDirection(this.startCell, this.endCell));
+    }
+  }
+
+  displayHint(word) {
+    const index = hints.findIndex(hint => hint.toLowerCase().includes(word));
+    if (index !== -1) {
+      console.log('Hint:', hints[index]);
+    }
+  }
+
+  displayLink(word) {
+    const index = hints.findIndex(hint => hint.toLowerCase().includes(word));
+    if (index !== -1) {
+      console.log('Link:', links[index]);
+    }
+  }
+}
+
+const matrix = [
+  ['H', 'E', 'L', 'L', 'O'],
+  ['W', 'O', 'R', 'L', 'D'],
+  ['J', 'A', 'V', 'A', 'S'],
+  ['C', 'R', 'I', 'P', 'T'],
+  ['I', 'S', 'A', 'W', 'E']
+];
+
+const wordSearch = new WordSearch(matrix);
