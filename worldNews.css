@@ -1,5 +1,6 @@
 /* CSS reset */
-body, h1 {
+body,
+h1 {
   margin: 0;
   padding: 0;
 }
@@ -32,7 +33,8 @@ body {
   position: relative;
 }
 
-.logo, #gameArea {
+.logo,
+#gameArea {
   margin-bottom: 0px;
 }
 
@@ -228,4 +230,23 @@ body {
 .hints p:hover {
   color: #000;
   text-decoration: underline;
+}
+
+
+#popup-notification {
+  /* Add your custom CSS styles here */
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 1rem;
+  text-align: center;
+  z-index: 999;
+}
+
+#close-popup {
+  /* Add your custom CSS styles for the close button */
 }
