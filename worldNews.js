@@ -327,9 +327,9 @@ if (typeof Object.merge != 'function') {
         // cvEl.addEventListener('touchstart', this.onTouchStart(this.matrix[row][col]));
         // cvEl.addEventListener('touchend', this.onTouchEnd());
         
-        cvEl.addEventListener('touchstart', handleTouchStart);
-        cvEl.addEventListener('touchmove', handleTouchMove);
-        cvEl.addEventListener('touchend', handleTouchEnd);
+        // cvEl.addEventListener('touchstart', handleTouchStart);
+        // cvEl.addEventListener('touchmove', handleTouchMove);
+        // cvEl.addEventListener('touchend', handleTouchEnd);
 
         divEl.appendChild(cvEl);
       }
