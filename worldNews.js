@@ -323,9 +323,9 @@ if (typeof Object.merge != 'function') {
         cvEl.addEventListener('mouseover', this.onMouseover(this.matrix[row][col]));
         cvEl.addEventListener('mouseup', this.onMouseup(this.matrix[row][col]));
 
-        // Add touch event listeners
-        cvEl.addEventListener('touchstart', this.onTouchStart(this.matrix[row][col]));
-        cvEl.addEventListener('touchend', this.onTouchEnd());
+        // // Add touch event listeners
+        // cvEl.addEventListener('touchstart', this.onTouchStart(this.matrix[row][col]));
+        // cvEl.addEventListener('touchend', this.onTouchEnd());
         
         cvEl.addEventListener('touchstart', handleTouchStart);
         cvEl.addEventListener('touchmove', handleTouchMove);
