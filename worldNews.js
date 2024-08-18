@@ -319,9 +319,9 @@ if (typeof Object.merge != 'function') {
         ctx.fillText(this.matrix[row][col].letter, x, y);
 
         // Add event listeners
-        // cvEl.addEventListener('mousedown', this.onMousedown(this.matrix[row][col]));
-        // cvEl.addEventListener('mouseover', this.onMouseover(this.matrix[row][col]));
-        // cvEl.addEventListener('mouseup', this.onMouseup(this.matrix[row][col]));
+        cvEl.addEventListener('mousedown', this.onMousedown(this.matrix[row][col]));
+        cvEl.addEventListener('mouseover', this.onMouseover(this.matrix[row][col]));
+        cvEl.addEventListener('mouseup', this.onMouseup(this.matrix[row][col]));
 
         // Add touch event listeners
         cvEl.addEventListener('touchstart', this.onTouchStart(this.matrix[row][col]));
