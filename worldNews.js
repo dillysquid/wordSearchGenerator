@@ -294,88 +294,39 @@ if (typeof Object.merge != 'function') {
   /**
    * Draw the matrix
    */
-WordSearch.prototype.drawmatrix = function() {
-  for (var row = 0; row < this.settings.gridSize; row++) {
-    // New row
-    var divEl = document.createElement('div');
-    divEl.setAttribute('class', 'ws-row');
-    this.wrapEl.appendChild(divEl);
+  WordSearch.prototype.drawmatrix = function() {
+    for (var row = 0; row < this.settings.gridSize; row++) {
+      // New row
+      var divEl = document.createElement('div');
+      divEl.setAttribute('class', 'ws-row');
+      this.wrapEl.appendChild(divEl);
 
-    for (var col = 0; col < this.settings.gridSize; col++) {
-      var cvEl = document.createElement('canvas');
-      cvEl.setAttribute('class', 'ws-col');
-      cvEl.setAttribute('width', 30);
-      cvEl.setAttribute('height', 30);
+      for (var col = 0; col < this.settings.gridSize; col++) {
+        var cvEl = document.createElement('canvas');
+        cvEl.setAttribute('class', 'ws-col');
+        cvEl.setAttribute('width', 40);
+        cvEl.setAttribute('height', 40);
 
-      // Fill text in middle center
-      var x = cvEl.width / 2,
-        y = cvEl.height / 2;
+        // Fill text in middle center
+        var x = cvEl.width / 2,
+          y = cvEl.height / 2;
 
-      var ctx = cvEl.getContext('2d');
-      ctx.font = 'bold 18px Calibri';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillStyle = '#333'; // Text color
-      ctx.fillText(this.matrix[row][col].letter, x, y);
+        var ctx = cvEl.getContext('2d');
+        ctx.font = '400 28px Calibri';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = '#333'; // Text color
+        ctx.fillText(this.matrix[row][col].letter, x, y);
 
-      // Add event listeners
-      cvEl.addEventListener('mousedown', this.onMousedown(this.matrix[row][col]));
-      cvEl.addEventListener('mouseover', this.onMouseover(this.matrix[row][col]));
-      cvEl.addEventListener('mouseup', this.onMouseup(this.matrix[row][col]));
+        // Add event listeners
+        cvEl.addEventListener('mousedown', this.onMousedown(this.matrix[row][col]));
+        cvEl.addEventListener('mouseover', this.onMouseover(this.matrix[row][col]));
+        cvEl.addEventListener('mouseup', this.onMouseup());
 
-      // Add touch event listeners
-      cvEl.addEventListener('touchstart', this.onTouchStart(this.matrix[row][col]));
-      cvEl.addEventListener('touchend', this.onTouchEnd());
-
-      divEl.appendChild(cvEl);
-    }
-  }
-}
-
-WordSearch.prototype.onMousedown = function(cell) {
-  return function(event) {
-    // Save the current cell as the start of selection
-    cell.isStart = true;
-    cell.canvasEl.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
-  };
-};
-
-WordSearch.prototype.onMouseup = function(cell) {
-  return function(event) {
-    if (cell.isStart) {
-      // If this cell is the start of selection, mark it as the end and clear selection
-      cell.isEnd = true;
-      cell.canvasEl.style.boxShadow = '';
-
-      // Clear selection
-      for (var i = 0; i < this.matrix.length; i++) {
-        for (var j = 0; j < this.matrix[i].length; j++) {
-          var currentCell = this.matrix[i][j];
-          if (currentCell.isStart || currentCell.isEnd) {
-            // Reset selection for cells that were part of the selection
-            currentCell.isStart = false;
-            currentCell.isEnd = false;
-            currentCell.canvasEl.style.boxShadow = '';
-          }
-        }
+        divEl.appendChild(cvEl);
       }
     }
-  };
-};
-
-WordSearch.prototype.onTouchStart = function(cell) {
-  return (function(e) {
-    // Handle touch start event
-    console.log('Touch start on cell:', cell);
-  }).bind(this);
-};
-
-WordSearch.prototype.onTouchEnd = function() {
-  return (function(e) {
-    // Handle touch end event
-    console.log('Touch end');
-  }).bind(this);
-};
+  }
 
   /**
    * Fill up the remaining items
